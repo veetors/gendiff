@@ -1,5 +1,9 @@
 language: python
-python: 3.8
+python:
+  # we want to test our package on several versions of Python
+  - 3.6
+  - 3.7
+  - 3.8
 
 before_install:
   # make depends on poetry
@@ -9,4 +13,4 @@ install:
   - make install
 
 script:
-  - make lint
+  - make check

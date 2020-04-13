@@ -4,8 +4,13 @@ install:
 lint:
 	@poetry run flake8 gendiff
 
-build:
+selfcheck:
+	poetry check
+
+check: selfcheck lint
+
+build: check
 	@poetry build
 
-publish:
+publish: build
 	@poetry publish -r test_pypi
