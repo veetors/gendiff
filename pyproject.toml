@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "veetors_gendiff"
+version = "0.0.1"
+description = "CLI tool that shows differences between two configuration files"
+authors = ["veetors <veetor.s@gmail.com>"]
+license = "MIT"
+repository = "https://github.com/veetors/python-project-lvl2"
+readme = "README.md"
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Natural Language :: English",
+  "Programming Language :: Python"
+]
+packages = [
+  { include = "gendiff" },
+]
+
+[tool.poetry.scripts]
+gendiff = "gendiff.scripts.gendiff:main"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+wemake-python-styleguide = "^0.14.0"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
