@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "veetors_gendiff"
-version = "0.0.1"
+version = "0.0.2"
 description = "CLI tool that shows differences between two configuration files"
 authors = ["veetors <veetor.s@gmail.com>"]
 license = "MIT"
@@ -20,7 +20,7 @@ packages = [
 gendiff = "gendiff.scripts.gendiff:main"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.7"
 
 [tool.poetry.dev-dependencies]
 wemake-python-styleguide = "^0.14.0"
