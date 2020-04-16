@@ -10,3 +10,5 @@ CLI tool that shows differences between two configuration files
 
 ## Installation
 `pip install --index-url https://test.pypi.org/simple veetors-gendiff`
+
+[![gendiff](https://asciinema.org/a/1x598bPFFEHjbnXLcfjva3JrO.png)](https://asciinema.org/a/1x598bPFFEHjbnXLcfjva3JrO)
