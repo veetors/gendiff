@@ -6,6 +6,21 @@ from gendiff import diff
 from gendiff.parser import get_parser
 
 
+def generate_diff(config1, config2):
+    """Compare two files and generate diff string.
+
+    Parameters:
+        filepath1 (str): path to first file
+        filepath2 (str): path to second file
+
+    Returns:
+        str
+    """
+    print('generate_diff')
+
+    return diff.generate(config1, config2)
+
+
 def main():
     """Run main script."""
     parser = get_parser()

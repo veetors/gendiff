@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "veetors_gendiff"
-version = "0.0.2"
+version = "0.0.3"
 description = "CLI tool that shows differences between two configuration files"
 authors = ["veetors <veetor.s@gmail.com>"]
 license = "MIT"
