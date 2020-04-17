@@ -19,27 +19,53 @@ def get_fixtures_path(filename):
     return os.path.join(os.getcwd(), 'tests', 'fixtures', filename)
 
 
-def test_json():
+def test_plain_json():
     """Check that diff generated correctly."""
     with open(get_fixtures_path('result_plain')) as result_file:
         expected = result_file.read()
 
     actual = generate_diff(
-        get_fixtures_path('config1.json'),
-        get_fixtures_path('config2.json'),
+        get_fixtures_path('plain_config1.json'),
+        get_fixtures_path('plain_config2.json'),
     )
 
     assert actual == expected
 
 
-def test_yaml():
+def test_plain_yaml():
     """Check that diff generated correctly."""
     with open(get_fixtures_path('result_plain')) as result_file:
         expected = result_file.read()
 
     actual = generate_diff(
-        get_fixtures_path('config1.yml'),
-        get_fixtures_path('config2.yml'),
+        get_fixtures_path('plain_config1.yml'),
+        get_fixtures_path('plain_config2.yml'),
+    )
+
+    assert actual == expected
+
+
+def test_nested_json():
+    """Check that diff generated correctly."""
+    with open(get_fixtures_path('result_nested')) as result_file:
+        expected = result_file.read()
+
+    actual = generate_diff(
+        get_fixtures_path('nested_config1.json'),
+        get_fixtures_path('nested_config2.json'),
+    )
+
+    assert actual == expected
+
+
+def test_nested_yaml():
+    """Check that diff generated correctly."""
+    with open(get_fixtures_path('result_nested')) as result_file:
+        expected = result_file.read()
+
+    actual = generate_diff(
+        get_fixtures_path('nested_config1.yml'),
+        get_fixtures_path('nested_config2.yml'),
     )
 
     assert actual == expected
