@@ -1,1 +1,5 @@
-{"foo": 1, "bar": 1, "fid": 4}
+{
+    "host": "hexlet.io",
+    "timeout": 20,
+    "verbose": true
+}
