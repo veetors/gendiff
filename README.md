@@ -16,3 +16,6 @@ CLI tool that shows differences between two configuration files
 
 ## Plain yaml
 [![plain_yaml](https://asciinema.org/a/BWkWgM3hWwVvbv7gxWBYL9DP1.png)](https://asciinema.org/a/BWkWgM3hWwVvbv7gxWBYL9DP1)
+
+## Nested json
+[![nested_json](https://asciinema.org/a/9mGHZs2LwTq71zJGEJLfWxdRZ.png)](https://asciinema.org/a/9mGHZs2LwTq71zJGEJLfWxdRZ)
