@@ -2,8 +2,6 @@
 
 """Module with functions for transform diff tree to string."""
 
-from gendiff.diff import value
-from gendiff.diff.common import build_output, get_indent
 from gendiff.diff.constants import (
     ADDED,
     CHILDREN,
@@ -14,6 +12,8 @@ from gendiff.diff.constants import (
     UPDATED,
     VALUE,
 )
+from gendiff.diff.render import value
+from gendiff.diff.render.common import build_output, get_indent
 
 
 def stringify_not_changed_node(node_key, node_value, depth):

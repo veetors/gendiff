@@ -2,7 +2,7 @@
 
 """Functions for build specific string representation."""
 
-from gendiff.diff.common import build_output, get_indent
+from gendiff.diff.render.common import build_output, get_indent
 
 
 def normalize_value(arg):

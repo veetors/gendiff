@@ -5,6 +5,9 @@
         "setting4": "blah blah",
         "setting5": {
             "key5": "value5"
+        },
+        "site": {
+            "base1": "base1 value"
         }
     },
   
