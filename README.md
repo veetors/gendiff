@@ -19,3 +19,6 @@ CLI tool that shows differences between two configuration files
 
 ## Nested json
 [![nested_json](https://asciinema.org/a/9mGHZs2LwTq71zJGEJLfWxdRZ.png)](https://asciinema.org/a/9mGHZs2LwTq71zJGEJLfWxdRZ)
+
+## Nested yaml
+[![nested_json](https://asciinema.org/a/A4oZTtOuMVM0vrZqcQA4ChEvd.png)](https://asciinema.org/a/A4oZTtOuMVM0vrZqcQA4ChEvd)
