@@ -3,8 +3,8 @@
 """Generage diff function."""
 
 from gendiff import file
-from gendiff.diff.stringify import diff_stringify
-from gendiff.diff.tree import get_diff_tree
+from gendiff.diff.stringify import stringify
+from gendiff.diff.tree import make_diff_tree
 
 
 def generate(filepath1, filepath2):
@@ -19,6 +19,6 @@ def generate(filepath1, filepath2):
     """
     config1 = file.load(filepath1)
     config2 = file.load(filepath2)
-    diff_tree = get_diff_tree(config1, config2)
+    diff_tree = make_diff_tree(config1, config2)
 
-    return diff_stringify(diff_tree)
+    return stringify(diff_tree)
