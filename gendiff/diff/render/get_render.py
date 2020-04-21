@@ -2,7 +2,9 @@
 
 """Return render function for specific format."""
 
-from gendiff.diff.constants import NESTED, PLAIN
+import json
+
+from gendiff.diff.constants import JSON, NESTED, PLAIN
 from gendiff.diff.render import nested, plain
 
 
@@ -18,6 +20,7 @@ def get_render(output_format):
     renders = {
         NESTED: nested.stringify,
         PLAIN: plain.stringify,
+        JSON: lambda tree: json.dumps(tree, sort_keys=True),
     }
 
     return renders.get(output_format, nested.stringify)

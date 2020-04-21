@@ -7,7 +7,7 @@ import os
 import pytest
 
 from gendiff import generate_diff
-from gendiff.diff.constants import NESTED, PLAIN
+from gendiff.diff.constants import JSON, NESTED, PLAIN
 
 JSON_EXT = '.json'
 YML_EXT = '.yml'
@@ -66,6 +66,8 @@ filenames = (
     get_test_args(NESTED, YML_EXT, NESTED),
     get_test_args(NESTED, JSON_EXT, PLAIN),
     get_test_args(NESTED, YML_EXT, PLAIN),
+    get_test_args(NESTED, JSON_EXT, JSON),
+    get_test_args(NESTED, YML_EXT, JSON),
 )
 
 
