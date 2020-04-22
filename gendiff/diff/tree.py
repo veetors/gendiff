@@ -96,7 +96,7 @@ def handle_shared_items(item_value1, item_value2):
     return make_updated_node(item_value1, item_value2)
 
 
-def make_diff_tree(config1, config2):  # rename to make_diff_tree
+def make_diff_tree(config1, config2):
     """Compare two configs and generate diff object.
 
     Parameters:
