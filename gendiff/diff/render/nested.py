@@ -6,6 +6,7 @@ from gendiff.diff.constants import (
     ADDED,
     CHILDREN,
     NOT_CHANGED,
+    PARENT,
     PREV_VALUE,
     REMOVED,
     TYPE,
@@ -45,13 +46,6 @@ def stringify_updated_node(node_key, node_value, depth):
     Returns:
         str
     """
-    if 'children' in node_value:
-        return build_output(
-            item_key=node_key,
-            item_value=stringify(node_value.get(CHILDREN), depth + 1),
-            indent=get_indent(depth),
-        )
-
     added = build_output(
         item_key=node_key,
         item_value=value.build(node_value[VALUE], depth + 1),
@@ -106,11 +100,30 @@ def stringify_added_node(node_key, node_value, depth):
     )
 
 
+def stringify_parent_node(node_key, node_value, depth):
+    """Build string representation for AST-node that have child nodes.
+
+    Parameters:
+        node_key (any): node key
+        node_value (dict): node value
+        depth (int): node nesting level
+
+    Returns:
+        str
+    """
+    return build_output(
+        item_key=node_key,
+        item_value=stringify(node_value.get(CHILDREN), depth + 1),
+        indent=get_indent(depth),
+    )
+
+
 stringify_node_funcs = {
     NOT_CHANGED: stringify_not_changed_node,
     UPDATED: stringify_updated_node,
     REMOVED: stringify_removed_node,
     ADDED: stringify_added_node,
+    PARENT: stringify_parent_node,
 }
 
 

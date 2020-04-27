@@ -5,6 +5,7 @@
 from gendiff.diff.constants import (
     ADDED,
     CHILDREN,
+    PARENT,
     PREV_VALUE,
     REMOVED,
     TYPE,
@@ -24,12 +25,6 @@ def stringify_updated_node(node_key, node_value, ancestors):
     Returns:
         str
     """
-    if 'children' in node_value:
-        return stringify_tree(
-            node_value.get(CHILDREN),
-            [*ancestors, node_key],
-        )
-
     return (
         "Property '{key}' was changed. "
         "From '{prev_value}' to '{value}'\n"  # noqa WPS326
@@ -79,10 +74,28 @@ def stringify_added_node(node_key, node_value, ancestors):
     )
 
 
+def stringify_parent_node(node_key, node_value, ancestors):
+    """Build string representation for AST-node that have child nodes.
+
+    Parameters:
+        node_key (any): node key
+        node_value (dict): node value
+        ancestors (list): ancestors keys
+
+    Returns:
+        str
+    """
+    return stringify_tree(
+        node_value.get(CHILDREN),
+        [*ancestors, node_key],
+    )
+
+
 stringify_node_funcs = {
     UPDATED: stringify_updated_node,
     REMOVED: stringify_removed_node,
     ADDED: stringify_added_node,
+    PARENT: stringify_parent_node,
 }
 
 
