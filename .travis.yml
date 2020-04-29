@@ -1,3 +1,7 @@
+env:
+  global:
+    - CC_TEST_REPORTER_ID=c8d134dce933242f0c304a37df6220c85c3c6a25e7f0647e24e18977f5c15096
+
 language: python
 python:
   # we want to test our package on several versions of Python
@@ -12,5 +16,13 @@ before_install:
 install:
   - make install
 
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
 script:
   - make check
+
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT

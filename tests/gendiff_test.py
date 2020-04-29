@@ -36,17 +36,18 @@ def get_test_args(filetype, extension, output_format):
     Returns:
         tuple
     """
-    filename1 = '{filetype}_config1{extension}'.format(
-        filetype=filetype,
-        extension=extension,
+    filename1 = '{0}_config1{1}'.format(
+        filetype,
+        extension,
     )
-    filename2 = '{filetype}_config2{extension}'.format(
-        filetype=filetype,
-        extension=extension,
+    filename2 = '{0}_config2{1}'.format(
+        filetype,
+        extension,
     )
-    expected_file = 'result_{filetype}_format_{output_format}'.format(
-        filetype=filetype,
-        output_format=output_format,
+    expected_file = 'result_{0}_format_{1}{2}'.format(
+        filetype,
+        output_format,
+        JSON_EXT if output_format == JSON else '',
     )
 
     return (
