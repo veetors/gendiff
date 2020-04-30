@@ -7,7 +7,7 @@ import os
 import pytest
 
 from gendiff import generate_diff
-from gendiff.diff.constants import JSON, NESTED, PLAIN
+from gendiff.diff import render
 
 JSON_EXT = '.json'
 YML_EXT = '.yml'
@@ -47,7 +47,7 @@ def get_test_args(filetype, extension, output_format):
     expected_file = 'result_{0}_format_{1}{2}'.format(
         filetype,
         output_format,
-        JSON_EXT if output_format == JSON else '',
+        JSON_EXT if output_format == render.JSON else '',
     )
 
     return (
@@ -59,16 +59,16 @@ def get_test_args(filetype, extension, output_format):
 
 
 filenames = (
-    get_test_args(PLAIN, JSON_EXT, NESTED),
-    get_test_args(PLAIN, YML_EXT, NESTED),
-    get_test_args(PLAIN, JSON_EXT, PLAIN),
-    get_test_args(PLAIN, YML_EXT, PLAIN),
-    get_test_args(NESTED, JSON_EXT, NESTED),
-    get_test_args(NESTED, YML_EXT, NESTED),
-    get_test_args(NESTED, JSON_EXT, PLAIN),
-    get_test_args(NESTED, YML_EXT, PLAIN),
-    get_test_args(NESTED, JSON_EXT, JSON),
-    get_test_args(NESTED, YML_EXT, JSON),
+    get_test_args(render.PLAIN, JSON_EXT, render.NESTED),
+    get_test_args(render.PLAIN, YML_EXT, render.NESTED),
+    get_test_args(render.PLAIN, JSON_EXT, render.PLAIN),
+    get_test_args(render.PLAIN, YML_EXT, render.PLAIN),
+    get_test_args(render.NESTED, JSON_EXT, render.NESTED),
+    get_test_args(render.NESTED, YML_EXT, render.NESTED),
+    get_test_args(render.NESTED, JSON_EXT, render.PLAIN),
+    get_test_args(render.NESTED, YML_EXT, render.PLAIN),
+    get_test_args(render.NESTED, JSON_EXT, render.JSON),
+    get_test_args(render.NESTED, YML_EXT, render.JSON),
 )
 
 

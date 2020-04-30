@@ -2,46 +2,46 @@
 
 """Module with functions for generate diff AST."""
 
-from gendiff.diff import constants
+from gendiff import diff
 
 
 def make_removed_node(item_value):  # noqa: D103
     return {
-        constants.TYPE: constants.REMOVED,
-        constants.VALUE: item_value,
+        diff.TYPE: diff.REMOVED,
+        diff.VALUE: item_value,
     }
 
 
 def make_added_node(item_value):  # noqa: D103
     return {
-        constants.TYPE: constants.ADDED,
-        constants.VALUE: item_value,
+        diff.TYPE: diff.ADDED,
+        diff.VALUE: item_value,
     }
 
 
 def make_parent_node(item_value1, item_value2):  # noqa: D103
     return {
-        constants.TYPE: constants.PARENT,
-        constants.CHILDREN: make_diff_tree(item_value1, item_value2),
+        diff.TYPE: diff.PARENT,
+        diff.CHILDREN: make_diff(item_value1, item_value2),
     }
 
 
 def make_not_changed_node(item_value):  # noqa: D103
     return {
-        constants.TYPE: constants.NOT_CHANGED,
-        constants.VALUE: item_value,
+        diff.TYPE: diff.NOT_CHANGED,
+        diff.VALUE: item_value,
     }
 
 
 def make_updated_node(item_value1, item_value2):  # noqa: D103
     return {
-        constants.TYPE: constants.UPDATED,
-        constants.VALUE: item_value2,
-        constants.PREV_VALUE: item_value1,
+        diff.TYPE: diff.UPDATED,
+        diff.VALUE: item_value2,
+        diff.PREV_VALUE: item_value1,
     }
 
 
-def make_diff_tree(config1, config2):  # noqa: WPS210
+def make_diff(config1, config2):  # noqa: WPS210
     """Compare two configs and generate diff object.
 
     Parameters:

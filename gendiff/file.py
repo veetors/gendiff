@@ -16,15 +16,22 @@ def load(filepath):
 
     Returns:
         obj
+
+    Raises:
+        NameError: file with current extension is not supported
     """
-    parsers = {
+    get_parser = {
         '.json': json.load,
         '.yaml': yaml.safe_load,
         '.yml': yaml.safe_load,
-    }
+    }.get
 
     (_, extension) = os.path.splitext(filepath)
-    parse = parsers[extension]
+
+    parse = get_parser(extension)
+
+    if not parse:
+        raise NameError('File type is not supported')
 
     with open(filepath) as input_file:
         output = parse(input_file)

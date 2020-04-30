@@ -2,132 +2,64 @@
 
 """Module with functions for transform diff tree to string."""
 
-from gendiff.diff.constants import (
-    ADDED,
-    CHILDREN,
-    NOT_CHANGED,
-    PARENT,
-    PREV_VALUE,
-    REMOVED,
-    TYPE,
-    UPDATED,
-    VALUE,
-)
-from gendiff.diff.render import value
-from gendiff.diff.render.common import build_output, get_indent
+from gendiff import diff
 
 
-def stringify_not_changed_node(node_key, node_value, depth):
-    """Build string representation for not changed AST-node.
+def get_indent(depth, extra_indent=0):
+    """Return specific indent.
 
     Parameters:
-        node_key (any): node key
-        node_value (dict): node value
-        depth (int): node nesting level
+        depth (int): element nesting level
+        extra_indent (int): extra indent
 
     Returns:
         str
     """
-    return build_output(
-        item_key=node_key,
-        item_value=value.build(node_value[VALUE], depth + 1),
-        indent=get_indent(depth),
-    )
+    return ' ' * (4 * depth - 2 + extra_indent)
 
 
-def stringify_updated_node(node_key, node_value, depth):
-    """Build string representation for updated AST-node.
+def stringify_dict(target_dict, depth):
+    """Build string representations for dict.
 
     Parameters:
-        node_key (any): node key
-        node_value (dict): node value
-        depth (int): node nesting level
+        target_dict (dict): dict to transform
+        depth (int): element nesting level
 
     Returns:
         str
     """
-    added = build_output(
-        item_key=node_key,
-        item_value=value.build(node_value[VALUE], depth + 1),
-        indent=get_indent(depth),
-        sign='+',
+    output_parts = []
+    for item_key, item_value in target_dict.items():
+        output_parts.append('{indent}  {key}: {value}\n'.format(
+            indent=(get_indent(depth)),
+            key=item_key,
+            value=item_value,
+        ))
+
+    return '{{\n{output}{spaces}}}'.format(
+        output=''.join(output_parts),
+        spaces=get_indent(depth - 1, 2),
     )
-    removed = build_output(
-        item_key=node_key,
-        item_value=value.build(node_value[PREV_VALUE], depth + 1),
-        indent=get_indent(depth),
-        sign='-',
-    )
-
-    return added + removed
 
 
-def stringify_removed_node(node_key, node_value, depth):
-    """Build string representation for removed AST-node.
+def build_value(item_value, depth):
+    """Build specific string representation for value.
 
     Parameters:
-        node_key (any): node key
-        node_value (dict): node value
-        depth (int): node nesting level
+        item_value (any): value to transform
+        depth (int): element nesting level
 
     Returns:
-        str
+        call function
     """
-    return build_output(
-        item_key=node_key,
-        item_value=value.build(node_value[VALUE], depth + 1),
-        indent=get_indent(depth),
-        sign='-',
-    )
+    if isinstance(item_value, dict):
+        return stringify_dict(item_value, depth)
+    elif isinstance(item_value, bool):
+        return str(item_value).lower()
+    return str(item_value)
 
 
-def stringify_added_node(node_key, node_value, depth):
-    """Build string representation for added AST-node.
-
-    Parameters:
-        node_key (any): node key
-        node_value (dict): node value
-        depth (int): node nesting level
-
-    Returns:
-        str
-    """
-    return build_output(
-        item_key=node_key,
-        item_value=value.build(node_value[VALUE], depth + 1),
-        indent=get_indent(depth),
-        sign='+',
-    )
-
-
-def stringify_parent_node(node_key, node_value, depth):
-    """Build string representation for AST-node that have child nodes.
-
-    Parameters:
-        node_key (any): node key
-        node_value (dict): node value
-        depth (int): node nesting level
-
-    Returns:
-        str
-    """
-    return build_output(
-        item_key=node_key,
-        item_value=stringify(node_value.get(CHILDREN), depth + 1),
-        indent=get_indent(depth),
-    )
-
-
-stringify_node_funcs = {
-    NOT_CHANGED: stringify_not_changed_node,
-    UPDATED: stringify_updated_node,
-    REMOVED: stringify_removed_node,
-    ADDED: stringify_added_node,
-    PARENT: stringify_parent_node,
-}
-
-
-def stringify(tree, depth=1):
+def stringify(tree, depth=1):  # noqa: C901 WPS210 WPS231k
     """Transform AST to string.
 
     Parameters:
@@ -137,15 +69,39 @@ def stringify(tree, depth=1):
     Returns:
         str
     """
-    output = ''
-    nodes = list(tree.items())
-    nodes.sort()
+    output_parts = []
 
-    for node_key, node_value in nodes:
-        stringify_node = stringify_node_funcs[node_value[TYPE]]
-        output += stringify_node(node_key, node_value, depth)
+    for node_key, node_value in sorted(tree.items()):
+        node_type = node_value.get(diff.TYPE)
+        processed_value = build_value(node_value.get(diff.VALUE), depth + 1)
+
+        if node_type == diff.REMOVED:  # noqa: WPS223
+            output_data = [('-', processed_value)]
+        elif node_type == diff.ADDED:
+            output_data = [('+', processed_value)]
+        elif node_type == diff.NOT_CHANGED:
+            output_data = [(' ', processed_value)]
+        elif node_type == diff.PARENT:
+            output_data = [
+                (' ', stringify(node_value.get(diff.CHILDREN), depth + 1)),
+            ]
+        elif node_type == diff.UPDATED:
+            output_data = [
+                ('+', processed_value),
+                ('-', build_value(node_value.get(diff.PREV_VALUE), depth + 1)),
+            ]
+
+        for sign, output_value in output_data:
+            output_parts.append(
+                '{indent}{sign} {key}: {value}\n'.format(
+                    indent=get_indent(depth),
+                    sign=sign,
+                    key=node_key,
+                    value=output_value,
+                ),
+            )
 
     return '{{\n{output}{s}}}'.format(
         s=get_indent(depth - 1, 2),
-        output=output,
+        output=''.join(output_parts),
     )

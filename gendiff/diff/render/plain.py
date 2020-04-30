@@ -2,71 +2,32 @@
 
 """Module with functions for transform diff tree to string."""
 
-from gendiff.diff.constants import (
-    ADDED,
-    CHILDREN,
-    PARENT,
-    PREV_VALUE,
-    REMOVED,
-    TYPE,
-    UPDATED,
-    VALUE,
-)
+from gendiff import diff
 
 
-def stringify_updated_node(node_key, node_value, ancestors):
-    """Build string representation for updated AST-node.
-
-    Parameters:
-        node_key (any): node key
-        node_value (dict): node value
-        ancestors (list): ancestors keys
-
-    Returns:
-        str
-    """
+def stringify_updated_node(node_key, node_value, ancestors):  # noqa: D103
     return (
         "Property '{key}' was changed. "
-        "From '{prev_value}' to '{value}'\n"  # noqa WPS326
+        "From '{prev_value}' to '{value}'\n"  # noqa: WPS326
     ).format(
         key='.'.join([*ancestors, node_key]),
-        prev_value=node_value.get(PREV_VALUE),
-        value=node_value.get(VALUE),
+        prev_value=node_value.get(diff.PREV_VALUE),
+        value=node_value.get(diff.VALUE),
     )
 
 
-def stringify_removed_node(node_key, node_value, ancestors):
-    """Build string representation for removed AST-node.
-
-    Parameters:
-        node_key (any): node key
-        node_value (dict): node value
-        ancestors (list): ancestors keys
-
-    Returns:
-        str
-    """
+def stringify_removed_node(node_key, node_value, ancestors):  # noqa: D103
     return "Property '{key}' was removed\n".format(
         key='.'.join([*ancestors, node_key]),
     )
 
 
-def stringify_added_node(node_key, node_value, ancestors):
-    """Build string representation for added AST-node.
-
-    Parameters:
-        node_key (any): node key
-        node_value (dict): node value
-        ancestors (list): ancestors keys
-
-    Returns:
-        str
-    """
+def stringify_added_node(node_key, node_value, ancestors):  # noqa: D103
     result_key = '.'.join([*ancestors, node_key])
-    if isinstance(node_value.get(VALUE), dict):
+    if isinstance(node_value.get(diff.VALUE), dict):
         result_value = 'complex_value'
     else:
-        result_value = node_value.get(VALUE)
+        result_value = node_value.get(diff.VALUE)
 
     return "Property '{key}' was added with value: '{value}'\n".format(
         key=result_key,
@@ -74,32 +35,14 @@ def stringify_added_node(node_key, node_value, ancestors):
     )
 
 
-def stringify_parent_node(node_key, node_value, ancestors):
-    """Build string representation for AST-node that have child nodes.
-
-    Parameters:
-        node_key (any): node key
-        node_value (dict): node value
-        ancestors (list): ancestors keys
-
-    Returns:
-        str
-    """
+def stringify_parent_node(node_key, node_value, ancestors):  # noqa: D103
     return stringify_tree(
-        node_value.get(CHILDREN),
+        node_value.get(diff.CHILDREN),
         [*ancestors, node_key],
     )
 
 
-stringify_node_funcs = {
-    UPDATED: stringify_updated_node,
-    REMOVED: stringify_removed_node,
-    ADDED: stringify_added_node,
-    PARENT: stringify_parent_node,
-}
-
-
-def stringify_tree(tree, ancestors):
+def stringify_tree(tree, ancestors):  # noqa: WPS231
     """Transform AST to string.
 
     Parameters:
@@ -110,14 +53,18 @@ def stringify_tree(tree, ancestors):
         str
     """
     output = ''
-    nodes = list(tree.items())
-    nodes.sort()
 
-    for node_key, node_value in nodes:
-        if node_value.get(TYPE) not in stringify_node_funcs:
-            continue
-        stringify_node = stringify_node_funcs[node_value[TYPE]]
-        output += stringify_node(node_key, node_value, ancestors)
+    for node_key, node_value in sorted(tree.items()):
+        node_type = node_value.get(diff.TYPE)
+
+        if node_type == diff.REMOVED:
+            output += stringify_removed_node(node_key, node_value, ancestors)
+        elif node_type == diff.ADDED:
+            output += stringify_added_node(node_key, node_value, ancestors)
+        elif node_type == diff.PARENT:
+            output += stringify_parent_node(node_key, node_value, ancestors)
+        elif node_type == diff.UPDATED:
+            output += stringify_updated_node(node_key, node_value, ancestors)
 
     return'{output}'.format(output=output)
 

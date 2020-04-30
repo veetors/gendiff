@@ -2,8 +2,21 @@
 
 """Transform AST to string."""
 
-from gendiff.diff.render.get_render import get_render
+import json
 
-__all__ = (  # noqa WPS410
-    'get_render',
+from gendiff.diff.render import nested, plain
+
+PLAIN = 'plain'
+NESTED = 'nested'
+JSON = 'json'
+
+get_ = {  # noqa: WPS120
+    NESTED: nested.stringify,
+    PLAIN: plain.stringify,
+    JSON: lambda tree: json.dumps(tree, sort_keys=True),
+}.get
+
+
+__all__ = (  # noqa: WPS410
+    'get_',
 )
