@@ -5,16 +5,6 @@
 from gendiff import file
 from gendiff.diff import render, tree
 
-ADDED = 'added'
-NOT_CHANGED = 'not_changed'
-REMOVED = 'removed'
-UPDATED = 'updated'
-CHILDREN = 'children'
-PARENT = 'patent'
-TYPE = 'type'
-VALUE = 'value'
-PREV_VALUE = 'prev_value'
-
 
 def generate(filepath1, filepath2, output_format='nested'):
     """Compare two files and generate diff string.
@@ -27,9 +17,9 @@ def generate(filepath1, filepath2, output_format='nested'):
     Returns:
         str
     """
-    config1 = file.load(filepath1)
-    config2 = file.load(filepath2)
-    diff_tree = tree.make_diff(config1, config2)
+    tree1 = file.load(filepath1)
+    tree2 = file.load(filepath2)
+    diff_tree = tree.compare(tree1, tree2)
 
     stringify = render.get_(output_format)
 

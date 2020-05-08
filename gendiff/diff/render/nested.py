@@ -2,7 +2,7 @@
 
 """Module with functions for transform diff tree to string."""
 
-from gendiff import diff
+from gendiff.diff import tree
 
 
 def get_indent(depth, extra_indent=0):
@@ -59,11 +59,11 @@ def build_value(item_value, depth):
     return str(item_value)
 
 
-def stringify(tree, depth=1):  # noqa: C901 WPS210 WPS231k
+def stringify(diff_tree, depth=1):  # noqa: C901 WPS210 WPS231k
     """Transform AST to string.
 
     Parameters:
-        tree (dict): AST
+        diff_tree (dict): AST
         depth (int): nesting level
 
     Returns:
@@ -71,24 +71,22 @@ def stringify(tree, depth=1):  # noqa: C901 WPS210 WPS231k
     """
     output_parts = []
 
-    for node_key, node_value in sorted(tree.items()):
-        node_type = node_value.get(diff.TYPE)
-        processed_value = build_value(node_value.get(diff.VALUE), depth + 1)
+    for node_key, node_value in sorted(diff_tree.items()):
+        node_type = node_value[tree.TYPE]
+        processed_value = build_value(node_value[tree.VALUE], depth + 1)
 
-        if node_type == diff.REMOVED:  # noqa: WPS223
+        if node_type == tree.REMOVED:  # noqa: WPS223
             output_data = [('-', processed_value)]
-        elif node_type == diff.ADDED:
+        elif node_type == tree.ADDED:
             output_data = [('+', processed_value)]
-        elif node_type == diff.NOT_CHANGED:
+        elif node_type == tree.NOT_CHANGED:
             output_data = [(' ', processed_value)]
-        elif node_type == diff.PARENT:
-            output_data = [
-                (' ', stringify(node_value.get(diff.CHILDREN), depth + 1)),
-            ]
-        elif node_type == diff.UPDATED:
+        elif node_type == tree.PARENT:
+            output_data = [(' ', stringify(node_value[tree.VALUE], depth + 1))]
+        elif node_type == tree.UPDATED:
             output_data = [
                 ('+', processed_value),
-                ('-', build_value(node_value.get(diff.PREV_VALUE), depth + 1)),
+                ('-', build_value(node_value[tree.PREV_VALUE], depth + 1)),
             ]
 
         for sign, output_value in output_data:
