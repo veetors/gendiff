@@ -2,11 +2,11 @@
 
 """Package with functions for generate diff."""
 
-from gendiff import file
-from gendiff.diff import render, tree
+from gendiff import diff, format
+from gendiff.app import file
 
 
-def generate(filepath1, filepath2, output_format='nested'):
+def generate(filepath1, filepath2, output_format=format.NESTED):
     """Compare two files and generate diff string.
 
     Parameters:
@@ -19,13 +19,14 @@ def generate(filepath1, filepath2, output_format='nested'):
     """
     tree1 = file.load(filepath1)
     tree2 = file.load(filepath2)
-    diff_tree = tree.compare(tree1, tree2)
+    diff_tree = diff.compare(tree1, tree2)
 
-    stringify = render.get_(output_format)
+    stringify = format.get(output_format)
 
     return stringify(diff_tree)
 
 
 __all__ = (  # noqa: WPS410
+    'get_parser',
     'generate',
 )

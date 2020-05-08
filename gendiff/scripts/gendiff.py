@@ -3,30 +3,16 @@
 
 """Package entry point."""
 
-import argparse
+from gendiff import app, format
 
-from gendiff import diff
-
-DEFAULT_OUTPUT_FORMAT = 'nested'
+DEFAULT_OUTPUT_FORMAT = format.NESTED
 
 
 def main():
     """Run main script."""
-    parser = argparse.ArgumentParser(description='Generate diff')
-    parser.add_argument('first_file')
-    parser.add_argument('second_file')
-    parser.add_argument(
-        '-f',
-        '--format',
-        type=str,
-        default=DEFAULT_OUTPUT_FORMAT,
-        choices=['nested', 'plain', 'json'],
-        help='set format of output (default: {default})'.format(
-            default=DEFAULT_OUTPUT_FORMAT,
-        ),
-    )
+    parser = app.get_parser()
     args = parser.parse_args()
-    output = diff.generate(args.first_file, args.second_file, args.format)
+    output = app.generate(args.first_file, args.second_file, args.format)
     print(output)
 
 
